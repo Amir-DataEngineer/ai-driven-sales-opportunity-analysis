@@ -1,0 +1,355 @@
+# Data Model Explanation
+## Screenshots
+
+### Data Model
+![Data model](screenshots/data%20model.png)
+
+## Overview
+
+This document explains the data model used in the **AI-Driven Sales Opportunity Analysis** Power BI project. The model is designed to support reliable KPI reporting, opportunity performance analysis, AI-powered insights, and business-friendly exploration across sales, product, campaign, owner, and time dimensions.
+
+The model follows a **star-schema-oriented business intelligence design** with clearly separated fact and dimension tables, dedicated calendar tables, and a clean semantic layer for report users.
+
+---
+
+## Modeling Objective
+
+The purpose of the model is to provide a trusted analytical structure for answering questions such as:
+
+- How many opportunities were won, lost, or closed?
+- Which product categories generate stronger close rates and won revenue?
+- Which managers, sales owners, campaigns, and industries are associated with stronger or weaker outcomes?
+- How does revenue behave over time?
+- What business factors influence opportunity outcomes?
+
+To support these questions, the model was designed with these priorities:
+
+- clear separation between facts and dimensions
+- stable one-to-many relationships
+- dedicated date tables for time intelligence
+- hidden technical keys for a cleaner report experience
+- reusable measures stored in a dedicated measure table
+
+---
+
+## Core Tables
+
+### Fact Tables
+
+#### 1. Opportunities
+This is the primary fact table for sales opportunity analysis.
+
+It contains business events and numeric measures related to opportunity performance, such as:
+- OpportunitySeq
+- AccountSeq
+- ProductSeq
+- CampaignSeq
+- SystemUserSeq
+- Status
+- Purchase Process
+- Probability
+- Discount
+- Value
+- Budget
+- CloseDate
+- Opportunity Created On
+- Days Remaining in Pipeline
+- DaysToClose
+
+This table supports KPI calculation, win/loss analysis, pipeline metrics, Key Influencers, and anomaly analysis over time.
+
+#### 2. Cases
+This fact table supports service or case-related analysis and enables comparison or extension beyond opportunity data.
+
+It contains fields such as:
+- CaseSeq
+- AccountSeq
+- ProductSeq
+- SystemUserSeq
+- Case Created On
+- Status
+- Severity
+- Origin
+- CSAT / CSAT Label
+- SLA-related metrics
+- Resolution Minutes
+
+This table is useful for operational and support-related reporting.
+
+---
+
+### Dimension Tables
+
+#### 1. Accounts
+This dimension provides customer or account-level attributes used to segment opportunities and cases.
+
+Example fields:
+- AccountSeq
+- Account Name
+- Account Number
+- Account Owner
+- IndustrySeq or Industry
+- City
+- Country
+- Region
+- AccountOwnerSeq
+
+Business role:
+- customer segmentation
+- regional analysis
+- account-level slicing and filtering
+
+#### 2. Products
+This dimension provides product and product category attributes.
+
+Example fields:
+- ProductSeq
+- Product
+- Product category
+- MinOppValue
+- MaxOppValue
+
+Business role:
+- product-level revenue analysis
+- category comparisons
+- close rate analysis by product grouping
+
+#### 3. Campaigns
+This dimension stores campaign-related attributes used in sales analysis.
+
+Example fields:
+- CampaignSeq
+- Campaign Name
+- Type
+- Factor
+
+Business role:
+- campaign performance analysis
+- comparison of opportunity outcomes by campaign
+
+#### 4. Owners
+This dimension stores sales ownership and management structure.
+
+Example fields:
+- SystemUserSeq
+- Sales owner
+- Manager
+n- Rev Goal
+
+Business role:
+- performance comparison by owner
+- management-based small multiples
+- influencer analysis by ownership structure
+
+#### 5. Industries
+This dimension standardizes industry values for cleaner segmentation.
+
+Example fields:
+- IndustrySeq
+- Industry
+
+Business role:
+- industry-level filtering
+- comparison of opportunity and revenue behavior by industry
+
+#### 6. Opportunity Calendar
+Dedicated date table used for opportunity-related time analysis.
+
+Example fields:
+- Date_Converted / Date
+- DaySeq
+- Day
+- Month
+- Month Number
+- Year
+- Year Month
+- Relative period fields
+
+Business role:
+- trend reporting
+- monthly and daily analysis
+- anomaly detection
+- time slicing and filtering
+
+#### 7. Case Calendar
+Dedicated date table used for case-related time analysis.
+
+Example fields:
+- Date
+- DaySeq
+- Day
+- Month
+- Month Number
+- Year
+- Year Month
+- Week / Relative period fields
+
+Business role:
+- case trend analysis
+- time-based service reporting
+
+---
+
+## Relationship Design
+
+The model is built around **one-to-many relationships** from dimensions to fact tables.
+
+### Main opportunity relationships
+- Accounts[AccountSeq] -> Opportunities[AccountSeq]
+- Products[ProductSeq] -> Opportunities[ProductSeq]
+- Campaigns[CampaignSeq] or Campaign Name -> Opportunities[CampaignSeq] / Campaign Name
+- Owners[SystemUserSeq] -> Opportunities[SystemUserSeq]
+- Opportunity Calendar[Date] -> Opportunities[CloseDate] or opportunity date field
+
+### Main case relationships
+- Accounts[AccountSeq] -> Cases[AccountSeq]
+- Products[ProductSeq] -> Cases[ProductSeq]
+- Owners[SystemUserSeq] -> Cases[SystemUserSeq]
+- Case Calendar[Date] -> Cases[Case Created On]
+
+### Supporting relationship
+- Industries -> Accounts
+
+This relationship structure allows dimensions such as account, product, owner, and industry to filter fact tables in a natural and business-friendly way.
+
+---
+
+## Modeling Principles Applied
+
+### 1. One version of each business dimension
+Where possible, dimensions were kept separate from fact tables so that filtering remains stable and predictable.
+
+### 2. Technical keys are hidden
+Columns such as:
+- AccountSeq
+- ProductSeq
+- CampaignSeq
+- SystemUserSeq
+- OpportunitySeq
+- CaseSeq
+- IndustrySeq
+- ContactSeq
+
+are used for relationships and internal structure, but are hidden from report consumers because they do not provide direct analytical value.
+
+### 3. Date tables are separated by subject area
+Opportunity-related dates and case-related dates are managed through separate calendar tables. This improves clarity and avoids ambiguous time behavior across facts.
+
+### 4. Measures are centralized
+A dedicated `_Measures` table is used to store reusable business measures such as:
+- Opportunity Count
+- Revenue Won
+- Win Rate
+- Close %
+- Weighted Pipeline
+- Average Discount
+- Avg Days to Close
+
+This improves model organization and makes the field list cleaner.
+
+### 5. User-facing fields are simplified
+Fields intended for slicing and business explanation are kept readable and business-oriented, while purely technical fields remain hidden.
+
+---
+
+## Time Intelligence Design
+
+The model uses dedicated calendar tables to support:
+- monthly revenue trends
+- last 90 days analysis
+- anomaly detection
+- close rate trend analysis
+- slicers by month, year, and relative period
+
+Using formal date tables improves consistency in time-based visuals and helps Power BI analytical features work more reliably.
+
+---
+
+## AI and Analytical Support
+
+The model was structured to support advanced Power BI visuals and features, including:
+
+### Key Influencers
+Used to analyze factors associated with:
+- Status = Won
+- Status = Lost
+
+Typical explanatory fields include:
+- Discount
+- Product category
+- Campaign Name
+- Purchase Process
+- Industry
+- Sales owner
+- Manager
+- Value
+
+### Decomposition Tree
+Supports guided KPI breakdown across dimensions such as:
+- Manager
+- Product category
+- Campaign
+- Industry
+- Purchase Process
+
+### Anomaly Detection
+Supported through:
+- a dedicated opportunity date table
+- continuous time axis
+- single-series line chart setup
+
+### Q&A
+The model is designed with readable field names and business-friendly concepts to improve natural-language exploration.
+
+---
+
+## Data Quality and Preparation Considerations
+
+The following data preparation practices were applied before or during modeling:
+
+- duplicate checks on key columns
+- correction of data types
+- standardization of category values such as Status and Purchase Process
+- handling of blanks and unknown values
+- validation of relationship cardinality
+- review of filter paths to avoid ambiguity
+- formatting of measures by business meaning
+
+These steps were important to make the model both technically reliable and business-ready.
+
+---
+
+## User Experience Considerations
+
+The data model was not designed only for technical correctness. It was also shaped to support a cleaner report experience.
+
+Examples:
+- hidden key columns to reduce clutter
+- readable dimensions for slicers and visuals
+- dedicated measure table for easier navigation
+- relationship structure that supports natural filtering behavior
+
+The goal is to help users focus on analysis rather than on the internal complexity of the model.
+
+---
+
+## Summary
+
+This data model was designed as a business intelligence foundation for opportunity analysis, KPI reporting, AI-powered insight generation, and portfolio-quality reporting in Power BI.
+
+Its design combines:
+- fact/dimension separation
+- clean relationship structure
+- dedicated calendar tables
+- centralized measures
+- hidden technical fields
+- support for AI and advanced visuals
+
+Overall, the model aims to deliver **trusted reporting, KPI clarity, and decision-ready insight**.
+
+---
+
+## Author
+
+**Amir Hossein Bagheri**  
+Business Intelligence Analyst | Power BI | Microsoft Fabric | SQL | Data Modeling
