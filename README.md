@@ -232,7 +232,8 @@ The report structure is designed to surface insights such as:
 ### Anomaly Detection
 ![Anomaly Detection](screenshots/Anomaly%20Detection1.png)
 
-
+### Data Model
+![Data Model](screenshots/Data%20model.png)
 ---
 
 ## Notes
