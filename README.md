@@ -222,6 +222,7 @@ The report structure is designed to surface insights such as:
 ## Screenshots
 
 ### Key Influencers
+
 ![Key Influencers](screenshots/key-influencers-1.png)
 ![Key Influencers](screenshots/key-influencers-2.png)
 ![Key Influencers](screenshots/key-influencers-3.png)
@@ -230,7 +231,7 @@ The report structure is designed to surface insights such as:
 ![Decomposition Tree](screenshots/decomposition-tree-1.png)
 
 ### Anomaly Detection
-![Anomaly Detection](screenshots/anomaly-detection-1.png)
+![Anomaly Detection](screenshots/Anomaly Detection1.png)
 
 
 ---
