@@ -219,6 +219,36 @@ The report structure is designed to surface insights such as:
 6. Use Q&A for quick natural-language testing of the model.
 
 ---
+## Screenshots
+
+### Key Influencers
+![Key Influencers](screenshots/key influencers1.png)
+![Key Influencers](screenshots/key influencers2.png)
+![Key Influencers](screenshots/key influencers3.png)
+
+### Decomposition Tree
+![Decomposition Tree](screenshots/decomposition tree1.png)
+
+### Anomaly Detection
+![Anomaly Detection](screenshots/anomaly detection1.png)
+
+### Q&A
+![Q&A](screenshots/qna.png)
+
+---
+
+## Notes
+
+- This project was developed for portfolio and demonstration purposes.
+- AI visuals in Power BI may behave differently depending on filters, data distribution, and model structure.
+- Q&A quality depends on semantic model clarity and field naming quality.
+
+---
+
+## Author
+
+**Amir Hossein Bagheri**  
+Business Intelligence Analyst | Power BI | Microsoft Fabric | SQL | Data Modeling
 
 ## Repository Contents
 
@@ -230,9 +260,9 @@ structure Amir's Repository:
 ├── report/
 │   └── [project-file].pbix
 ├── screenshots/
-│   ├── key-influencers.png
-│   ├── decomposition-tree.png
-│   ├── anomaly-detection.png
+│   ├── key-influencers1.png
+│   ├── decomposition-tree1.png
+│   ├── anomaly-detection1.png
 │   
 ├── docs/
 │   ├── kpi-dictionary.pdf
